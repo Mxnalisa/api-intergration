@@ -1,12 +1,23 @@
-function generatePoem(event) {
-  event.preventDefault();
-
+function displayPoem(response) {
   new Typewriter("#poem", {
-    strings: "La tombe dit à la rose",
+    strings: response.data.answer,
     autoStart: true,
     delay: 1,
     cursor: "",
   });
+}
+
+function generatePoem(event) {
+  event.preventDefault();
+
+  let instructionsInput = document.querySelector("user-instructions");
+  let apiKey = "d7852e3faob94308902a4f5e758t6a40";
+  let context =
+    "You are a poem expert. Your mission is to quote poem stanzas in basic HTML, make sure to follow the user instructions";
+  let prompt = `User instructions: Quote a poem about ${instructionsInput.value}`;
+  let apiUrl = `https://api.shecodes.io/ai/v1/generate?prompt=${prompt}&context=${context}&key=${apiKey}`;
+
+  axios.get(apiUrl).then(displayPoem);
 }
 
 let poemFormElement = document.querySelector("#poem-generator-form");
